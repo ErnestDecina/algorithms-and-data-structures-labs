@@ -4,6 +4,13 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String args[]) throws IOException {
+        AlgoProgram algoProgram = new AlgoProgram();
+        algoProgram.getUserInput();
+        algoProgram.endProgram();
+
+
+
+        /*
         int s = 2;
         String fname = "wGraph3.txt";               
 
@@ -15,5 +22,6 @@ public class Main {
        //g.breadthFirst(s);
        //g.MST_Prim(s);   
        //g.SPT_Dijkstra(s);  
+       */
     } // End void main
 } // End class Main
