@@ -6,6 +6,8 @@ public class Main {
     public static void main(String args[]) throws IOException {
         AlgoProgram algoProgram = new AlgoProgram();
         algoProgram.getUserInput();
+        algoProgram.readFile();
+        algoProgram.startProgram();
         algoProgram.endProgram();
 
 

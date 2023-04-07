@@ -3,12 +3,16 @@ package com.ernestjohndecina;
 // Dependencies
 import java.util.Scanner;
 import java.io.File;
+import java.io.IOException;
 
 public class AlgoProgram {
     // Private Variables
     int startingVertex;
     String graphFileName;
     File graphFile = new File("");
+
+    //
+    Graph graph;
 
 
     // Constructor
@@ -43,8 +47,12 @@ public class AlgoProgram {
         userInputScanner.close();
     } // End void getUserInput
 
+    public void readFile() throws IOException {
+        graph = new Graph(graphFile);
+    } // End void readFile()
+
     public void startProgram() {
-        
+        graph.display();
     }
 
     public void endProgram() {

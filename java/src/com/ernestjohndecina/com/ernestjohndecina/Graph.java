@@ -1,6 +1,7 @@
 package com.ernestjohndecina;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class Graph {
     
     
     // default constructor
-    public Graph(String graphFile) throws IOException
+    public Graph(File graphFile) throws IOException
     {
         int u, v;
         int e, wgt;
@@ -65,8 +66,50 @@ public class Graph {
 
            
             
-            // write code to put edge into adjacency matrix     
+            // write code to put edge into adjacency matrix  
+            Node newNodeVertex = new Node();
+            Node newNodeConnectedVertex = new Node();
+
             
+            newNodeConnectedVertex.vert = v;
+            newNodeConnectedVertex.wgt = wgt;
+
+            newNodeVertex.vert = u;
+            newNodeVertex.wgt = wgt;
+
+            Node currentNode = adj[u];
+
+            // Check for first item in adjacency list
+            if(currentNode == z) {
+                adj[u] = newNodeConnectedVertex;
+                newNodeConnectedVertex.next = z;
+            } // End if
+            else {
+                // Traverse First list
+                while(currentNode.next != z) {
+                    currentNode = currentNode.next;
+                } // End
+
+                currentNode.next = newNodeConnectedVertex;
+                newNodeConnectedVertex.next = z;
+            } // End else
+
+
+            currentNode = adj[v];
+
+            if(currentNode == z) {
+                adj[v] = newNodeVertex;
+                newNodeVertex.next = z;
+            }
+            else {
+                // Traverse Second List
+                while(currentNode.next != z) {
+                    currentNode = currentNode.next;
+                } // End
+
+                currentNode.next = newNodeVertex;
+                newNodeVertex.next = z;
+            } // End else
         }	       
     }
    
