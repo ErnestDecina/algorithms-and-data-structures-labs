@@ -549,7 +549,9 @@ public class Main
         Graph graph = new Graph(graphFile);
         graph.display();
         graph.MST_Prim(startingVertex);
+        graph.showMST();
         graph.SPT_Dijkstra(startingVertex);
+        graph.showSPT();
         graph.DF(startingVertex);
         graph.BF(startingVertex);
     } // End void main
