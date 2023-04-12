@@ -53,6 +53,10 @@ public class AlgoProgram {
 
     public void startProgram() {
         graph.display();
+        graph.MST_Prim(startingVertex);
+        graph.showMST();
+        graph.SPT_Dijkstra(startingVertex);
+        graph.showSPT();
     }
 
     public void endProgram() {
