@@ -76,6 +76,7 @@ class Kruskals {
 
     public void MST_Kruskals() {
         int i = 0;
+        int mstWgt = 0;
         UnionFindSets partition = new UnionFindSets(V);
 
 
@@ -94,16 +95,24 @@ class Kruskals {
             int setU = partition.findSet(arrayEdges.get(edgeIndex).u);
 
             if( setU != setV ) {
+                partition.showSets();
+                System.out.println();
+
                 partition.union(setU, setV);
                 mst.add(arrayEdges.get(edgeIndex));
             } // End if
-
-            partition.showTrees();
-
         } // End for
 
-        // Show Trees
+        // Show Sets
         partition.showSets();
+
+
+        System.out.println("\n");
+        // Show total weight of MST
+        for (Edge edge: mst) 
+            mstWgt += edge.wgt;
+        
+        System.out.println("Weight of Kruskals Minimal Spanning Tree is: " + mstWgt);
     } // End void MST_Kruskals
 
     public void showMST()
