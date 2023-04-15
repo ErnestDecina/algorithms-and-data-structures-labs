@@ -56,8 +56,7 @@ class Kruskals {
 
         // Create an Array of Edges
         arrayEdges = new ArrayList<Edge>();          
-        arrayEdges.add(new Edge());
-        arrayEdges.get(0).wgt = 0;
+        arrayEdges.add(new Edge(0, 0, 0));
 
         // Add edges from txt file to Array of Edges
         for (e = 1; e <= E; ++e) {
@@ -70,11 +69,7 @@ class Kruskals {
             System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));
 
 
-            Edge newEdge = new Edge();
-            newEdge.u = u;
-            newEdge.v = v;
-            newEdge.wgt = wgt;
-
+            Edge newEdge = new Edge(u, v, wgt);
             arrayEdges.add(newEdge);
         } // End for
     } // End Graph Constructor
@@ -93,7 +88,7 @@ class Kruskals {
 
         mst = new ArrayList<Edge>();
 
-        for (int edgeIndex = 1; edgeIndex < E + 1; edgeIndex++) 
+        for (int edgeIndex = 0; edgeIndex < E; edgeIndex++) 
         {   
             int setV = partition.findSet(arrayEdges.get(edgeIndex).v);
             int setU = partition.findSet(arrayEdges.get(edgeIndex).u);
