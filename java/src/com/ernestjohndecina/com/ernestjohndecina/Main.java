@@ -1,17 +1,11 @@
 package com.ernestjohndecina;
 
-import java.beans.VetoableChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
-
-import javax.lang.model.util.ElementScanner14;
 
 class Kruskals {
     // Private Variable
@@ -19,8 +13,6 @@ class Kruskals {
     // E = number of edges
     // adj[] is the adjacency lists array
     private int V, E;
-    private Node[] adj;
-    private Node z;
     private ArrayList<Edge> mst;
     private Edge[] arrayEdges;
 
@@ -29,7 +21,6 @@ class Kruskals {
     public Kruskals(File graphFile) throws IOException {
         int u, v;
         int e, wgt;
-        Node t;
 
         FileReader fr = new FileReader(graphFile);
         BufferedReader reader = new BufferedReader(fr);
@@ -42,21 +33,12 @@ class Kruskals {
         V = Integer.parseInt(parts[0]);
         E = Integer.parseInt(parts[1]);
 
-        // create sentinel node
-        z = new Node();
-        z.next = z;
-
-        // create adjacency lists, initialised to sentinel node z
-        adj = new Node[V + 1];
-        for (v = 1; v <= V; ++v)
-            adj[v] = z;
-
         // read the edges
         System.out.println("Reading edges from text file");
 
         // Create an Array of Edges
-        arrayEdges = new Edge[E + 1];          
-        arrayEdges[0] = new Edge(0, 0, 0);
+        arrayEdges = new Edge[E + 1];                               // Create an array of Edges
+        arrayEdges[0] = new Edge(0, 0, 0);                    // Add a 0 Edge at the start
 
         // Add edges from txt file to Array of Edges
         for (e = 1; e <= E; ++e) {
@@ -68,44 +50,48 @@ class Kruskals {
 
             System.out.println("Edge " + toChar(u) + "--(" + wgt + ")--" + toChar(v));
 
+            
+            Edge newEdge = new Edge(u, v, wgt);                     // Create new Edge
+            arrayEdges[e] = newEdge;                                // Add new Edge to array of edges
+        } // End for    
 
-            Edge newEdge = new Edge(u, v, wgt);
-            arrayEdges[e] = newEdge;
-        } // End for
+        reader.close();
+        System.out.println();
     } // End Graph Constructor
 
     public void MST_Kruskals() {
-        int i = 0;
         int mstWgt = 0;
         UnionFindSets partition = new UnionFindSets(V);
 
+        System.out.println("Edge array before sorting:");
+        displayEdgesArray();                                        // Displaying unsorted Edges
 
         HeapSort.heapSort(arrayEdges, E + 1);                       // Sort the Array of Edges
+        
+        System.out.println("Edge array after sorting:");
+        displayEdgesArray();                                        // Displaying Sorted Edges
 
-        // Displaying Sorted Edges
-        for(i = 0; i < E + 1; i++)
-            System.out.println(toChar(arrayEdges[i].u)  + "-(" + arrayEdges[i].wgt + ")-" + toChar(arrayEdges[i].v));
-        System.out.println();
+        mst = new ArrayList<Edge>();                                // Create Array List of Edges
 
-        mst = new ArrayList<Edge>();
-
+        // Go through each edge in the array
+        printMST();
         for (int edgeIndex = 0; edgeIndex < E; edgeIndex++) 
         {   
-            int setV = partition.findSet(arrayEdges[edgeIndex].v);
-            int setU = partition.findSet(arrayEdges[edgeIndex].u);
+            int setV = partition.findSet(arrayEdges[edgeIndex].v);  // Find the set that vertex v is part of
+            int setU = partition.findSet(arrayEdges[edgeIndex].u);  // Find the set that vertex u is part of
 
-            if( setU != setV ) {
-                partition.showSets();
-                System.out.println();
-
-                partition.union(setU, setV);
-                mst.add(arrayEdges[edgeIndex]);
+            if( setU != setV ) {                                    // If setU is not  part of the same set at setV
+                partition.union(setU, setV);                        // Make setU and setV part of the same set
+                mst.add(arrayEdges[edgeIndex]);                     // Add to the Minimal Spanning Tree
             } // End if
+            
+            printMST();
         } // End for
 
         // Show Sets
         partition.showSets();
 
+        showMST();
 
         System.out.println("\n");
         // Show total weight of MST
@@ -115,20 +101,42 @@ class Kruskals {
         System.out.println("Weight of Kruskals Minimal Spanning Tree is: " + mstWgt);
     } // End void MST_Kruskals
 
-    public void showMST()
-    {
+    private void showMST() {
         System.out.print("\nMinimum spanning tree build from following edges:\n");
         for(int e = 0; e < V-1; ++e) {
+            System.out.print("Edge ");
             mst.get(e).show(); 
+            System.out.println();
         }
         System.out.println(); 
     } // End void showMST()
+
+    public void printMST() {
+        System.out.print("  MST: ");
+        System.out.print("[");
+        for(int e = 0; e < mst.size(); ++e) {
+            mst.get(e).show();
+            System.out.print(", ");
+        }
+        System.out.print("]");
+        System.out.println(); 
+    } // End void showMST()
+    
 
     //
     // Function Dependencies
     //
     //
 
+    /**
+     * This method is used to display the contents of arrayEdges
+     */
+    public void displayEdgesArray()
+    {
+        for(int i = 0; i < E + 1; i++)
+            System.out.println(toChar(arrayEdges[i].u)  + "-(" + arrayEdges[i].wgt + ")-" + toChar(arrayEdges[i].v));
+        System.out.println();
+    } // End void displayEdgesArray
 
     
     /**
@@ -141,20 +149,6 @@ class Kruskals {
         return (char) (u + 64);
     } // End char toChar(u)
 
-    /**
-     * method to display the graph representation
-     */
-    public void display() {
-        int v;
-        Node n;
-
-        for (v = 1; v <= V; ++v) {
-            System.out.print("\nadj[" + toChar(v) + "] ->");
-            for (n = adj[v]; n != z; n = n.next)
-                System.out.print(" |" + toChar(n.vert) + " | " + n.wgt + "| ->");
-        }
-        System.out.println("");
-    } // End void display()
 
     //
     // Class Dependencies
@@ -164,16 +158,15 @@ class Kruskals {
     private static class HeapSort {
         public static void heapSort(Edge[] array, int size)
         {
-            
             for(int k = (size / 2) - 1; k > 0; k--) {
                 siftDown(k, array, size);
             } // End for
 
             for(int k = size - 1; k > 1; k--) {
-                Edge v = array[0];
-                array[0] = array[k];
-                siftDown(0, array, k);
-                array[k] = v;
+                Edge v = array[0];                  // Largest value on heap
+                array[0] = array[k];                // a[k] is last value on heap
+                siftDown(0, array, k);            // k is now heap size
+                array[k] = v;                       // a[k] is no longer in heap
             } // End for
 
         } // End void heapSort()
@@ -181,9 +174,9 @@ class Kruskals {
         private static void siftDown(int k, Edge[] array, int size)
         {
             Edge edge = array[k];
-            int j = (2 * k) + 1;
+            int j = (2 * k) + 1;                    // Left child of k since heap begins in a[0]
 
-            while(j <= size - 1) {
+            while(j <= size - 1) {                  // While left child is within heap
                 if(j < size - 1 && array[j].wgt < array[j + 1].wgt ) ++j;
                 if( edge.wgt >= array[j].wgt) break;
 
@@ -222,16 +215,12 @@ class Kruskals {
         } // End void makeSet(int x)
 
         public void union(int set1, int set2) {
+            // set1 and set2 are not already in same set. Merge them
             if( rank[set1] < rank[set2] ) 
-            {
                 treeParent[set1] = set2;
-            } // End if
             else if ( rank[set1] > rank[set2])
-            {
                 treeParent[set2] = set1;
-            } // End else if 
-            else 
-            {
+            else {
                 treeParent[set2] = set1;
                 rank[set1] = rank[set1] + 1;
             } // End else 
@@ -300,19 +289,13 @@ class Kruskals {
         } // End Edge Constructor
 
         public void show() {
-            System.out.print("Edge " + toChar(u) + "--" + wgt + "--" + toChar(v) + "\n");
+            System.out.print(toChar(u) + "--" + wgt + "--" + toChar(v));
         }
 
         // convert vertex into char for pretty printing
         private char toChar(int u) {
             return (char) (u + 64);
         }
-    }
-
-    private class Node {
-        public int vert;
-        public int wgt;
-        public Node next;
     }
 } // End class Kruskals
 
@@ -327,12 +310,11 @@ public class Main {
 
         Kruskals kruskals = new Kruskals(graphFile);
         kruskals.MST_Kruskals();
-        kruskals.showMST();
     } // End void main
 
 
     /**
-     * 
+     *  Method used to get user input
      */
     private static void getUserInput() {
         Scanner userInputScanner = new Scanner(System.in);

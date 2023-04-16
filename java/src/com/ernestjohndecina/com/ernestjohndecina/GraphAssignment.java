@@ -30,7 +30,6 @@ class Graph {
     {
         int u, v;
         int e, wgt;
-        Node t;
 
         FileReader fr = new FileReader(graphFile);
 		BufferedReader reader = new BufferedReader(fr);
@@ -109,6 +108,8 @@ class Graph {
             } // End else
 
         } // End for
+
+        reader.close();
     } // End Graph Constructor
 
 
