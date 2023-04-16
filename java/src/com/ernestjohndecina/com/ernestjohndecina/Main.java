@@ -74,22 +74,28 @@ class Kruskals {
         mst = new ArrayList<Edge>();                                // Create Array List of Edges
 
         // Go through each edge in the array
-        printMST();
+        System.out.println("Started Kruskals Minimal Spanning Tree: ");
         for (int edgeIndex = 0; edgeIndex < E; edgeIndex++) 
         {   
             int setV = partition.findSet(arrayEdges[edgeIndex].v);  // Find the set that vertex v is part of
             int setU = partition.findSet(arrayEdges[edgeIndex].u);  // Find the set that vertex u is part of
 
+            System.out.print("  ");
+            partition.showSets();
+            System.out.print("  ");
+            partition.showTrees();
+            System.out.println();
+
             if( setU != setV ) {                                    // If setU is not  part of the same set at setV
                 partition.union(setU, setV);                        // Make setU and setV part of the same set
                 mst.add(arrayEdges[edgeIndex]);                     // Add to the Minimal Spanning Tree
             } // End if
-            
-            printMST();
         } // End for
+        System.out.println("Finished Kruskals Minimal Spanning Tree.");
 
         // Show Sets
         partition.showSets();
+        partition.showTrees();
 
         showMST();
 
@@ -243,14 +249,11 @@ class Kruskals {
         public void showSets() {
             int u, root;
             int[] shown = new int[N + 1];
-            for (u = 1; u < N; ++u) {
+            for (u = 0; u < N; ++u) {
                 root = findSet(u);
-                if (shown[root] != 1) {
+                if (findSet(root) != u && shown[root] != 1) {
                     showSet(root);
                     shown[root] = 1;
-                }
-                else {
-                    return;
                 }
             }
             System.out.print("\n");
@@ -263,8 +266,7 @@ class Kruskals {
                 if (findSet(v) == root)
                     System.out.print(toChar(v) + " ");
             System.out.print("}  ");
-
-        }
+        }  
 
         private char toChar(int u) {
             return (char) (u + 64);
