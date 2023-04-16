@@ -241,6 +241,7 @@ class Kruskals {
 
         public void showTrees() {
             int i;
+            System.out.print("Tree: ");
             for (i = 1; i < N; ++i)
                 System.out.print(toChar(i) + "->" + toChar(treeParent[i]) + "  ");
             System.out.print("\n");
