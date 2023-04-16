@@ -22,7 +22,7 @@ class Kruskals {
     private Node[] adj;
     private Node z;
     private ArrayList<Edge> mst;
-    private ArrayList<Edge> arrayEdges;
+    private Edge[] arrayEdges;
 
 
     // default constructor
@@ -55,8 +55,8 @@ class Kruskals {
         System.out.println("Reading edges from text file");
 
         // Create an Array of Edges
-        arrayEdges = new ArrayList<Edge>();          
-        arrayEdges.add(new Edge(0, 0, 0));
+        arrayEdges = new Edge[E + 1];          
+        arrayEdges[0] = new Edge(0, 0, 0);
 
         // Add edges from txt file to Array of Edges
         for (e = 1; e <= E; ++e) {
@@ -70,7 +70,7 @@ class Kruskals {
 
 
             Edge newEdge = new Edge(u, v, wgt);
-            arrayEdges.add(newEdge);
+            arrayEdges[e] = newEdge;
         } // End for
     } // End Graph Constructor
 
@@ -84,22 +84,22 @@ class Kruskals {
 
         // Displaying Sorted Edges
         for(i = 0; i < E + 1; i++)
-            System.out.println(toChar(arrayEdges.get(i).u)  + "-(" + arrayEdges.get(i).wgt + ")-" + toChar(arrayEdges.get(i).v));
+            System.out.println(toChar(arrayEdges[i].u)  + "-(" + arrayEdges[i].wgt + ")-" + toChar(arrayEdges[i].v));
         System.out.println();
 
         mst = new ArrayList<Edge>();
 
         for (int edgeIndex = 0; edgeIndex < E; edgeIndex++) 
         {   
-            int setV = partition.findSet(arrayEdges.get(edgeIndex).v);
-            int setU = partition.findSet(arrayEdges.get(edgeIndex).u);
+            int setV = partition.findSet(arrayEdges[edgeIndex].v);
+            int setU = partition.findSet(arrayEdges[edgeIndex].u);
 
             if( setU != setV ) {
                 partition.showSets();
                 System.out.println();
 
                 partition.union(setU, setV);
-                mst.add(arrayEdges.get(edgeIndex));
+                mst.add(arrayEdges[edgeIndex]);
             } // End if
         } // End for
 
@@ -162,7 +162,7 @@ class Kruskals {
     //
 
     private static class HeapSort {
-        public static void heapSort(ArrayList<Edge> array, int size)
+        public static void heapSort(Edge[] array, int size)
         {
             
             for(int k = (size / 2) - 1; k > 0; k--) {
@@ -170,29 +170,29 @@ class Kruskals {
             } // End for
 
             for(int k = size - 1; k > 1; k--) {
-                Edge v = array.get(0);
-                array.set(0, array.get(k));
+                Edge v = array[0];
+                array[0] = array[k];
                 siftDown(0, array, k);
-                array.set(k, v);
+                array[k] = v;
             } // End for
 
         } // End void heapSort()
 
-        private static void siftDown(int k, ArrayList<Edge> array, int size)
+        private static void siftDown(int k, Edge[] array, int size)
         {
-            Edge edge = array.get(k);
+            Edge edge = array[k];
             int j = (2 * k) + 1;
 
             while(j <= size - 1) {
-                if(j < size - 1 && array.get(j).wgt < array.get(j + 1).wgt ) ++j;
-                if( edge.wgt >= array.get(j).wgt) break;
+                if(j < size - 1 && array[j].wgt < array[j + 1].wgt ) ++j;
+                if( edge.wgt >= array[j].wgt) break;
 
-                array.set(k, array.get(j));
+                array[k] = array[j];
                 k = j;
                 j = (2 * k) + 1;
             } // End while  
 
-            array.set(k, edge);
+            array[k] = edge;
         } // End void siftDown()
 
     } // End class HeapSort
