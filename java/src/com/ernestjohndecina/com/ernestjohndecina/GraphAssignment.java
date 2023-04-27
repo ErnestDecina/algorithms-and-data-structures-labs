@@ -1,5 +1,3 @@
-package com.ernestjohndecina;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -152,7 +150,7 @@ class Graph {
                 u = t.vert;                 // Set u as vertex number
                 wgt = t.wgt;                // Set wgt as weight of vertex u
 
-                if(wgt < dist[u])              // Check if new wgt is smaller than current wgt in dist[]
+                if(wgt < dist[u])           // Check if new wgt is smaller than current wgt in dist[]
                 {         
                     dist[u] = wgt;          // Replace with new wgt
                     parent[u] = v;          // Replace parent[u] to the connect vertex v

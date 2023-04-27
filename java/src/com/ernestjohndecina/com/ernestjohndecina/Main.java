@@ -1,5 +1,3 @@
-package com.ernestjohndecina;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -332,15 +330,6 @@ public class Main {
                 System.out.println("Please enter valid file name. Make sure to enter file extension");
             } // End if
         } // End while
-
-        System.out.println("Enter starting vertex as number: ");
-        while (!userInputScanner.hasNextInt()) {
-            System.out.println("Invalid input. Vertex must be a number");
-            System.out.println("Enter starting vertex as number: ");
-            userInputScanner.nextLine();
-        }
-
-        startingVertex = userInputScanner.nextInt();
 
         userInputScanner.close();
     } // End void getUserInput
